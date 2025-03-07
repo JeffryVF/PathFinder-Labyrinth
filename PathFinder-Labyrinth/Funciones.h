@@ -113,7 +113,7 @@ void grafo_dfs() {
 
 	if (option == 's')
 	{
-		R = automap_genration(v, a);
+		R = automap_generation(v, a);
 		print_map(R);
 	}
 	else {
