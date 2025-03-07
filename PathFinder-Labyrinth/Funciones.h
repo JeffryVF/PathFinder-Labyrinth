@@ -7,6 +7,7 @@
 #include <stdlib.h>
 #include <iostream>
 #include <vector>
+#include <random>
 using namespace std;
 
 
@@ -64,7 +65,32 @@ bool algoritmo_bfs(vector <vector<char>> R, int i, int j) {
 	return false;	// No he sido capaz de llegar a ningún tesoro
 }
 
+vector<vector<char>> automap_generation(int v, int a) {
+	vector<char> characters = { 't','X','.','a','e','i','o','u'};
+	vector <vector<char>> map(v, vector<char>(a));
 
+	random_device rd;
+	mt19937 gen(rd());
+	uniform_int_distribution<> dist(0, characters.size() - 1);
+
+	for (int i = 0; i < v; i++)
+	{
+		for (int j = 0; j < a; j++) {
+			map[i][j] = characters[dist(gen)];
+		}
+	}
+
+	return map;
+}
+
+void print_map(vector<vector<char>> R) {
+	for(const auto& row : R) {
+		for(const auto& cell : row) {
+			cout << cell << " ";
+		}
+		cout << '\n';
+	}
+}
 
 void grafo_dfs() {
 	/*1. Un Grafo tiene vertices y aristas*/
@@ -72,28 +98,43 @@ void grafo_dfs() {
 	int v; /*cantidad de vertices*/
 	int a; /*cantidad de aristas*/
 
+	cout << "Ingrese el numero de filas y columnas: ";
 	cin >> v >> a;
 
 	/*2. Vamos a definir el grafo*/
 
-	vector <vector<char>> R(v, vector<char>(a));
+	vector <vector<char>> R;
+
+	char option;
+	cout << "Desea generar un mapa automaticamente? (s/n): ";
+	cin >> option;
 
 	/*3. vamos a llenar el grafo o la cuadricula*/
 
-	for (int i = 0; i < v; i++) {
+	if (option == 's')
+	{
+		R = automap_genration(v, a);
+		print_map(R);
+	}
+	else {
+		cout << "Por favor ingrese el mapa: \n";
+		R = vector<vector<char>>(v, vector<char>(a));
 
-		for (int j = 0; j < a; j++) {
+		for (int i = 0; i < v; i++) {
 
-			cin >> R[i][j];
+			for (int j = 0; j < a; j++) {
 
+				cin >> R[i][j];
+
+			}
 		}
 	}
 
+
 	int r;	// fila inicial en que me encuentro
 	int c;	// columna inicial en que me encuentro
-
+	cout << "Ingrese la fila y columna inicial: \n";
 	cin >> r >> c;
-
 
 
 	bool respuesta = algoritmo_bfs(R, r - 1, c - 1);	// retornara true si puedo llegar a un tesoro desde (r,c)
@@ -103,6 +144,7 @@ void grafo_dfs() {
 	else cout << "no";
 	cout << endl;	// salto de linea
 
+	
 }
 
 #endif // !__funciones__
