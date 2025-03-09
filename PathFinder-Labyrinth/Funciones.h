@@ -3,6 +3,7 @@
 #ifndef __funciones__
 #define __funciones__
 
+#include<fstream>
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
@@ -92,6 +93,23 @@ void print_map(vector<vector<char>> R) {
 	}
 }
 
+void save_results(int x, int y, bool encontrado) {
+	ofstream archivo("resultados.txt", ios::app); // Modo append para no sobrescribir
+	if (!archivo) {
+		cerr << "Error al abrir el archivo.\n";
+		return;
+	}
+
+	if (encontrado) {
+		archivo << "Posición (" << x << ", " << y << ") llegó al tesoro.\n";
+	}
+	else {
+		archivo << "Posición (" << x << ", " << y << ") NO llegó al tesoro.\n";
+	}
+
+	archivo.close(); // Importante cerrar el archivo
+}
+
 void grafo_dfs() {
 	/*1. Un Grafo tiene vertices y aristas*/
 
@@ -143,7 +161,7 @@ void grafo_dfs() {
 	if (respuesta) cout << "yes";
 	else cout << "no";
 	cout << endl;	// salto de linea
-
+	save_results(r, c, respuesta);
 	
 }
 
